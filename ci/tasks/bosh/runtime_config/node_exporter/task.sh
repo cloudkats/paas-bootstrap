@@ -16,4 +16,4 @@ RUNTIME_CONFIG=paas-bootstrap-git/runtime-config/bosh/node-exporter-config.yml
 #TODO Needs to be parameterised
 bosh upload-release https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v${NODE_EXPORTER_VERSION}/node-exporter-${NODE_EXPORTER_VERSION}.tgz
 
-bosh update-runtime-config --non-interactive ${RUNTIME_CONFIG}
+bosh update-runtime-config --name node-exporter --non-interactive ${RUNTIME_CONFIG}

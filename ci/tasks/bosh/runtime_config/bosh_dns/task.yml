@@ -6,11 +6,12 @@ image_resource:
 
 inputs:
   - name: paas-bootstrap-git
+  - name: cf-deployment-git
   - name: bosh-manifest-s3
   - name: bosh-vars-s3
 
-run:
-  path: paas-bootstrap-git/ci/tasks/bosh/deploy_node_exporter/task.sh
+outputs:
+  - name: bosh-vars
 
-params:
-  NODE_EXPORTER_VERSION:
+run:
+  path: paas-bootstrap-git/ci/tasks/bosh/runtime_config/bosh_dns/task.sh
