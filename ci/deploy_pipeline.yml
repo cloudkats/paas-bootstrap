@@ -645,13 +645,26 @@ jobs:
       params:
         file: bosh-state/bosh-state.json
 
+- name: verify-bosh
+  serial: true
+  serial_groups: [cf,prometheus,smoke-tests,cats]
+  plan:
+  - get: paas-bootstrap-git
+    passed: [create-bosh]
+    trigger: true
+  - aggregate:
+    - get: bosh-vars-s3
+    - get: bosh-manifest-s3
+  - task: verify
+    file: paas-bootstrap-git/ci/tasks/bosh/test/task.yml
+
 - name: deploy-runtime-config
   - serial: true
     serial_groups: [cf,prometheus,smoke-tests,cats]
   plan:
   - aggregate:
     - get: paas-bootstrap-git
-      passed: [create-bosh]
+      passed: [verify-bosh]
       trigger: true
     - get: cf-deployment-git
       version: { ref: ((cf_commit_ref)) }
@@ -661,20 +674,8 @@ jobs:
     params:
       NODE_EXPORTER_VERSION: ((node_exporter_version))
   - task: deploy bosh dns addon
+    file: paas-bootstrap-git/ci/tasks/bosh/runtime_config/bosh_dns/task.yml
 
-
-- name: verify-bosh
-  serial: true
-  serial_groups: [cf,prometheus,smoke-tests,cats]
-  plan:
-  - get: paas-bootstrap-git
-    passed: [deploy-runtime-config]
-    trigger: true
-  - aggregate:
-    - get: bosh-vars-s3
-    - get: bosh-manifest-s3
-  - task: verify
-    file: paas-bootstrap-git/ci/tasks/bosh/test/task.yml
 
 - name: deploy-cf
   serial: true
