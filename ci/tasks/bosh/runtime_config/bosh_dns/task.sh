@@ -17,6 +17,7 @@ RUNTIME_CONFIG=bosh-deployment-git/runtime-configs/dns.yml
 cp bosh-runtime-config-dns-vars-s3/bosh-dns-variables.yml bosh-vars/bosh-dns-variables.yml
 
 bosh interpolate "$RUNTIME_CONFIG" \
+  -o paas-bootstrap-git/operations/runtime-config/recurse-dns.yml \
   --vars-store=bosh-vars/bosh-dns-variables.yml \
   > bosh-vars/bosh-dns.yml
 
