@@ -175,9 +175,6 @@ resources:
     versioned_file: bosh/bosh-dns-variables.yml
     server_side_encryption: 'aws:kms'
     sse_kms_key_id: ((s3_kms_key_id))
-    initial_version: "-"
-    initial_content_text: |
-        ---
 
 - name: cf-terraform
   type: terraform
@@ -677,13 +674,17 @@ jobs:
   plan:
   - aggregate:
     - get: paas-bootstrap-git
-      passed: [verify-bosh]
+      #passed: [verify-bosh]
       trigger: true
+    - get: bosh-deployment-git
+      version: { ref: ((bosh_commit_ref)) }
     - get: cf-deployment-git
       version: { ref: ((cf_commit_ref)) }
     - get: bosh-vars-s3
     - get: bosh-runtime-config-dns-vars-s3
     - get: bosh-manifest-s3
+  - task: delete default runtime config
+    file: paas-bootstrap-git/ci/tasks/bosh/runtime_config/delete_default/task.yml
   - task: deploy bosh node exporter addon
     file: paas-bootstrap-git/ci/tasks/bosh/runtime_config/node_exporter/task.yml
     params:
