@@ -7,6 +7,7 @@ image_resource:
 inputs:
   - name: paas-bootstrap-git
   - name: cf-deployment-git
+  - name: bosh-deployment-git
   - name: bosh-manifest-s3
   - name: bosh-vars-s3
   - name: bosh-runtime-config-dns-vars-s3
