@@ -166,6 +166,19 @@ resources:
       server_side_encryption: 'aws:kms'
       sse_kms_key_id: ((s3_kms_key_id))
 
+- name: bosh-runtime-config-dns-vars-s3
+  type: s3-iam
+  source:
+    bucket: ons-paas-((environment))-states
+    private: true
+    region_name: ((region))
+    versioned_file: bosh/bosh-dns-variables.yml
+    server_side_encryption: 'aws:kms'
+    sse_kms_key_id: ((s3_kms_key_id))
+    initial_version: "-"
+    initial_content_text: |
+        ---
+
 - name: cf-terraform
   type: terraform
   source:
@@ -659,8 +672,8 @@ jobs:
     file: paas-bootstrap-git/ci/tasks/bosh/test/task.yml
 
 - name: deploy-runtime-config
-  - serial: true
-    serial_groups: [cf,prometheus,smoke-tests,cats]
+  serial: true
+  serial_groups: [cf,prometheus,smoke-tests,cats]
   plan:
   - aggregate:
     - get: paas-bootstrap-git
@@ -669,13 +682,19 @@ jobs:
     - get: cf-deployment-git
       version: { ref: ((cf_commit_ref)) }
     - get: bosh-vars-s3
+    - get: bosh-runtime-config-dns-vars-s3
+    - get: bosh-manifest-s3
   - task: deploy bosh node exporter addon
     file: paas-bootstrap-git/ci/tasks/bosh/runtime_config/node_exporter/task.yml
     params:
       NODE_EXPORTER_VERSION: ((node_exporter_version))
   - task: deploy bosh dns addon
     file: paas-bootstrap-git/ci/tasks/bosh/runtime_config/bosh_dns/task.yml
-
+    on_success:
+      aggregate:
+      - put: bosh-runtime-config-dns-vars-s3
+        params:
+          file: bosh-vars/bosh-dns-variables.yml
 
 - name: deploy-cf
   serial: true

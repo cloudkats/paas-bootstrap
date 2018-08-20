@@ -12,9 +12,9 @@ export BOSH_CLIENT_SECRET="${bosh_admin_password}"
 export BOSH_ENVIRONMENT="https://${bosh_ip}:25555"
 export BOSH_CA_CERT=$(cat bosh_ca.pem)
 
-RUNTIME_CONFIG=cf-deployment-git/runtime-configs/dns.yml
+RUNTIME_CONFIG=bosh-deployment-git/runtime-configs/dns.yml
 
-cp bosh-vars-s3/bosh-dns-variables.yml bosh-vars/bosh-dns-variables.yml
+cp bosh-runtime-config-dns-vars-s3/bosh-dns-variables.yml bosh-vars/bosh-dns-variables.yml
 
 bosh interpolate "$RUNTIME_CONFIG" \
   --vars-store=bosh-vars/bosh-dns-variables.yml \
