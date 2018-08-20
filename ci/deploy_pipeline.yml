@@ -703,7 +703,7 @@ jobs:
   - aggregate:
     - get: paas-bootstrap-git
       trigger: true
-      passed: [verify-bosh]
+      passed: [deploy-runtime-config]
     - get: cf-deployment-git
       version: { ref: ((cf_commit_ref)) }
     - get: prometheus-deployment-git
