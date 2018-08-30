@@ -10,7 +10,7 @@ resource "aws_kms_key" "cf_blobstore_key" {
 }
 
 resource "aws_s3_bucket" "cf_buildpacks" {
-  bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks"
+  bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks-x"
   acl    = "private"
 
   versioning {
@@ -33,7 +33,7 @@ resource "aws_s3_bucket" "cf_buildpacks" {
 }
 
 resource "aws_s3_bucket" "cf_droplets" {
-  bucket = "${var.s3_prefix}-${var.environment}-cf-droplets"
+  bucket = "${var.s3_prefix}-${var.environment}-cf-droplets-x"
   acl    = "private"
 
   # versioning {
