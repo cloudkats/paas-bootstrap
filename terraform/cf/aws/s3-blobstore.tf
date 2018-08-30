@@ -101,25 +101,29 @@ resource "aws_s3_bucket" "cf_resource_pool" {
   }
 }
 
-resource "aws_s3_bucket" "cf_buildpacks-xxx" {
-  bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks-xxx"
+# ----
+
+resource "aws_s3_bucket" "cf_buildpacks-nokey" {
+  bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks-nokey"
   acl    = "private"
 
   versioning {
     enabled = false
   }
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = "${aws_kms_key.cf_blobstore_key.arn}"
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
 
   tags {
-    Name        = "${var.s3_prefix}-${var.environment}-cf-buildpacks-xxx"
+    Name        = "${var.s3_prefix}-${var.environment}-cf-buildpacks-nokey"
     Environment = "${var.environment}"
   }
+}
+
+resource "aws_s3_bucket" "cf_buildpacks-notag" {
+  bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks-notag"
+  acl    = "private"
+
+  versioning {
+    enabled = false
+  }
+
 }
