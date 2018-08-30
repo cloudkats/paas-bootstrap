@@ -490,3 +490,39 @@ jobs:
       action: destroy
     get_params:
       action: destroy
+
+- name: delete-buckets
+  serial_groups: [destruction]
+  serial: true
+  plan:
+  # - get: manual-force
+  #   trigger: true
+  #   passed: [terraform-destroy]
+  # - get: trigger-weekday-evening
+  #   trigger: true
+  #   passed: [terraform-destroy]
+  - get: paas-bootstrap-git
+  - task: empty-buckets
+    file: paas-bootstrap-git/ci/tasks/destroy/empty_buckets/task.yml
+    params:
+      ONS_PREFIX: ons-paas
+      ENVIRONMENT: ((environment))
+      NAMESPACE: prometheus
+  - task: empty-buckets
+    file: paas-bootstrap-git/ci/tasks/destroy/empty_buckets/task.yml
+    params:
+      ONS_PREFIX: ons-paas
+      ENVIRONMENT: ((environment))
+      NAMESPACE: cf
+  - task: empty-buckets
+    file: paas-bootstrap-git/ci/tasks/destroy/empty_buckets/task.yml
+    params:
+      ONS_PREFIX: ons-paas
+      ENVIRONMENT: ((environment))
+      NAMESPACE: bosh
+  - task: empty-buckets
+    file: paas-bootstrap-git/ci/tasks/destroy/empty_buckets/task.yml
+    params:
+      ONS_PREFIX: ons-paas
+      ENVIRONMENT: ((environment))
+      NAMESPACE: jumpbox
