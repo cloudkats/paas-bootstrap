@@ -26,10 +26,10 @@ resource "aws_s3_bucket" "cf_buildpacks" {
   #   }
   # }
 
-  # tags {
-  #   Name        = "${var.s3_prefix}-${var.environment}-cf-buildpacks"
-  #   Environment = "${var.environment}"
-  # }
+  tags {
+    Name        = "${var.s3_prefix}-${var.environment}-cf-buildpacks"
+    Environment = "${var.environment}"
+  }
 }
 
 resource "aws_s3_bucket" "cf_droplets" {

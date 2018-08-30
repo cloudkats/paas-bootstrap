@@ -478,7 +478,7 @@ jobs:
     - get: concourse-tfstate-s3
     - get: trigger-weekday-morning
       trigger: true
-      passed: [terraform-bosh-databases]
+      # passed: [terraform-bosh-databases]
     - get: paas-bootstrap-git
       trigger: true
       # passed: [terraform-bosh-databases]
