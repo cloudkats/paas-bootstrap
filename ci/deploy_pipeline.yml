@@ -20,8 +20,8 @@ resources:
 - name: trigger-weekday-morning
   type: time
   source:
-    start: 12:00 PM
-    stop: 13:50 PM
+    start: 5:00 PM
+    stop: 5:05 PM
     location: Europe/London
     days: [Monday, Tuesday, Wednesday, Thursday, Friday]
 
@@ -169,27 +169,27 @@ resources:
       server_side_encryption: 'aws:kms'
       sse_kms_key_id: ((s3_kms_key_id))
 
-# - name: databases-bosh-terraform
-#   type: terraform
-#   source:
-#     storage:
-#       bucket: ons-paas-((environment))-states
-#       bucket_path: bosh-databases/
-#       use_ec2_role: true
-#       region_name: ((region))
-#       server_side_encryption: 'aws:kms'
-#       sse_kms_key_id: ((s3_kms_key_id))
+- name: databases-bosh-terraform
+  type: terraform
+  source:
+    storage:
+      bucket: ons-paas-((environment))-states
+      bucket_path: bosh-databases/
+      use_ec2_role: true
+      region_name: ((region))
+      server_side_encryption: 'aws:kms'
+      sse_kms_key_id: ((s3_kms_key_id))
 
-# - name: cf-terraform
-#   type: terraform
-#   source:
-#     storage:
-#       bucket: ons-paas-((environment))-states
-#       bucket_path: cf/
-#       use_ec2_role: true
-#       region_name: ((region))
-#       server_side_encryption: 'aws:kms'
-#       sse_kms_key_id: ((s3_kms_key_id))
+- name: cf-terraform
+  type: terraform
+  source:
+    storage:
+      bucket: ons-paas-((environment))-states
+      bucket_path: cf/
+      use_ec2_role: true
+      region_name: ((region))
+      server_side_encryption: 'aws:kms'
+      sse_kms_key_id: ((s3_kms_key_id))
 
 # - name: prometheus-terraform
 #   type: terraform
@@ -282,15 +282,15 @@ resources:
 #     server_side_encryption: 'aws:kms'
 #     sse_kms_key_id: ((s3_kms_key_id))
 
-# - name: bosh-tfstate-s3
-#   type: s3-iam
-#   source:
-#     bucket: ons-paas-((environment))-states
-#     private: true
-#     region_name: ((region))
-#     versioned_file: bosh/((environment)).tfstate
-#     server_side_encryption: 'aws:kms'
-#     sse_kms_key_id: ((s3_kms_key_id))
+- name: bosh-tfstate-s3
+  type: s3-iam
+  source:
+    bucket: ons-paas-((environment))-states
+    private: true
+    region_name: ((region))
+    versioned_file: bosh/((environment)).tfstate
+    server_side_encryption: 'aws:kms'
+    sse_kms_key_id: ((s3_kms_key_id))
 
 # - name: bosh-vars-s3
 #   type: s3-iam
@@ -438,63 +438,63 @@ jobs:
       - jumpbox-terraform/metadata
       - vpc-vars/vars.json
 
-# - name: terraform-bosh-databases
-#   serial: true
-#   serial_groups: [rds,prometheus,smoke-tests,cats]
-#   plan:
-#   - aggregate:
-#     - get: vpc-tfstate-s3
-#     - get: bosh-terraform
-#       passed: [terraform-bosh]
-#       params:
-#         output_statefile: true
-#     - get: trigger-weekday-morning
-#       trigger: true
-#       passed: [terraform-bosh]
-#     - get: paas-bootstrap-git
-#       trigger: true
-#       passed: [terraform-bosh]
-#   - task: get database vars
-#     file: paas-bootstrap-git/ci/tasks/bosh/get_database_vars/task.yml
-#   - task: bosh db connectivity test
-#     file: paas-bootstrap-git/ci/tasks/bosh/db_connectivity_test/task.yml
-#     timeout: 5m
-#   - put: databases-bosh-terraform
-#     params:
-#       terraform_source: paas-bootstrap-git/terraform/bosh-databases/aws
-#       env_name: ((environment))
-#       var_files:
-#       - vpc-vars/vars.json
-#       - bosh-vars/vars.json
+- name: terraform-bosh-databases
+  serial: true
+  serial_groups: [rds,prometheus,smoke-tests,cats]
+  plan:
+  - aggregate:
+    - get: vpc-tfstate-s3
+    - get: bosh-terraform
+      passed: [terraform-bosh]
+      params:
+        output_statefile: true
+    - get: trigger-weekday-morning
+      trigger: true
+      passed: [terraform-bosh]
+    - get: paas-bootstrap-git
+      trigger: true
+      passed: [terraform-bosh]
+  - task: get database vars
+    file: paas-bootstrap-git/ci/tasks/bosh/get_database_vars/task.yml
+  - task: bosh db connectivity test
+    file: paas-bootstrap-git/ci/tasks/bosh/db_connectivity_test/task.yml
+    timeout: 5m
+  - put: databases-bosh-terraform
+    params:
+      terraform_source: paas-bootstrap-git/terraform/bosh-databases/aws
+      env_name: ((environment))
+      var_files:
+      - vpc-vars/vars.json
+      - bosh-vars/vars.json
 
-# - name: terraform-cf
-#   serial: true
-#   serial_groups: [rds,prometheus,smoke-tests,cats]
-#   plan:
-#   - aggregate:
-#     - get: vpc-tfstate-s3
-#     - get: jumpbox-tfstate-s3
-#     - get: bosh-tfstate-s3
-#     - get: concourse-tfstate-s3
-#     - get: trigger-weekday-morning
-#       trigger: true
-#       passed: [terraform-bosh-databases]
-#     - get: paas-bootstrap-git
-#       trigger: true
-#       passed: [terraform-bosh-databases]
-#   - task: get-terraform-vars
-#     file: paas-bootstrap-git/ci/tasks/cf/get_terraform_vars/task.yml
-#     params:
-#       ENVIRONMENT: ((environment))
-#   - put: cf-terraform
-#     params:
-#       terraform_source: paas-bootstrap-git/terraform/cf/aws
-#       env_name: ((environment))
-#       var_files:
-#       - vpc-vars/vars.json
-#       - jumpbox-vars/vars.json
-#       - bosh-vars/vars.json
-#       - concourse-vars/vars.json
+- name: terraform-cf
+  serial: true
+  serial_groups: [rds,prometheus,smoke-tests,cats]
+  plan:
+  - aggregate:
+    - get: vpc-tfstate-s3
+    - get: jumpbox-tfstate-s3
+    - get: bosh-tfstate-s3
+    - get: concourse-tfstate-s3
+    - get: trigger-weekday-morning
+      trigger: true
+      passed: [terraform-bosh-databases]
+    - get: paas-bootstrap-git
+      trigger: true
+      passed: [terraform-bosh-databases]
+  - task: get-terraform-vars
+    file: paas-bootstrap-git/ci/tasks/cf/get_terraform_vars/task.yml
+    params:
+      ENVIRONMENT: ((environment))
+  - put: cf-terraform
+    params:
+      terraform_source: paas-bootstrap-git/terraform/cf/aws
+      env_name: ((environment))
+      var_files:
+      - vpc-vars/vars.json
+      - jumpbox-vars/vars.json
+      - bosh-vars/vars.json
+      - concourse-vars/vars.json
 
 # - name: terraform-cf-databases
 #   serial: true
