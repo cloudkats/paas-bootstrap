@@ -469,7 +469,7 @@ jobs:
 
 - name: terraform-cf
   serial: true
-  serial_groups: [rds,prometheus,smoke-tests,cats]
+  # serial_groups: [rds,prometheus,smoke-tests,cats]
   plan:
   - aggregate:
     - get: vpc-tfstate-s3
@@ -481,7 +481,7 @@ jobs:
       passed: [terraform-bosh-databases]
     - get: paas-bootstrap-git
       trigger: true
-      passed: [terraform-bosh-databases]
+      # passed: [terraform-bosh-databases]
   - task: get-terraform-vars
     file: paas-bootstrap-git/ci/tasks/cf/get_terraform_vars/task.yml
     params:
