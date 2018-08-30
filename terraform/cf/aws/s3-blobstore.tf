@@ -13,9 +13,9 @@ resource "aws_s3_bucket" "cf_buildpacks" {
   bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks"
   acl    = "private"
 
-  # versioning {
-  #   enabled = false
-  # }
+  versioning {
+    enabled = false
+  }
 
   # server_side_encryption_configuration {
   #   rule {
