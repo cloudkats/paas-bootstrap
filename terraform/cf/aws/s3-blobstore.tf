@@ -10,7 +10,7 @@ resource "aws_kms_key" "cf_blobstore_key" {
 }
 
 resource "aws_s3_bucket" "cf_buildpacks" {
-  bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks-x"
+  bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks"
   acl    = "private"
 
   versioning {
@@ -33,26 +33,26 @@ resource "aws_s3_bucket" "cf_buildpacks" {
 }
 
 resource "aws_s3_bucket" "cf_droplets" {
-  bucket = "${var.s3_prefix}-${var.environment}-cf-droplets-x"
+  bucket = "${var.s3_prefix}-${var.environment}-cf-droplets"
   acl    = "private"
 
-  # versioning {
-  #   enabled = false
-  # }
+  versioning {
+    enabled = false
+  }
 
-  # server_side_encryption_configuration {
-  #   rule {
-  #     apply_server_side_encryption_by_default {
-  #       kms_master_key_id = "${aws_kms_key.cf_blobstore_key.arn}"
-  #       sse_algorithm     = "aws:kms"
-  #     }
-  #   }
-  # }
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = "${aws_kms_key.cf_blobstore_key.arn}"
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 
-  # tags {
-  #   Name        = "${var.s3_prefix}-${var.environment}-cf-droplets"
-  #   Environment = "${var.environment}"
-  # }
+  tags {
+    Name        = "${var.s3_prefix}-${var.environment}-cf-droplets"
+    Environment = "${var.environment}"
+  }
 }
 
 resource "aws_s3_bucket" "cf_packages" {
@@ -97,6 +97,29 @@ resource "aws_s3_bucket" "cf_resource_pool" {
 
   tags {
     Name        = "${var.s3_prefix}-${var.environment}-cf-resource-pool"
+    Environment = "${var.environment}"
+  }
+}
+
+resource "aws_s3_bucket" "cf_buildpacks-xxx" {
+  bucket = "${var.s3_prefix}-${var.environment}-cf-buildpacks-xxx"
+  acl    = "private"
+
+  versioning {
+    enabled = false
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = "${aws_kms_key.cf_blobstore_key.arn}"
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  tags {
+    Name        = "${var.s3_prefix}-${var.environment}-cf-buildpacks-xxx"
     Environment = "${var.environment}"
   }
 }
