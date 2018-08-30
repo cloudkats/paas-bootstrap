@@ -44,7 +44,7 @@ fly -t "$ENVIRONMENT" set-pipeline \
 fly -t "$ENVIRONMENT" unpause-pipeline -p deploy_pipeline
 fly -t "$ENVIRONMENT" expose-pipeline -p deploy_pipeline
 
-fly -t "$ENVIRONMENT" check-resource -r deploy_pipeline/jumpbox-deployment-git --from "ref:${jumpbox_commit_ref}"
-fly -t "$ENVIRONMENT" check-resource -r deploy_pipeline/bosh-deployment-git --from "ref:${bosh_commit_ref}"
-fly -t "$ENVIRONMENT" check-resource -r deploy_pipeline/cf-deployment-git --from "ref:${cf_tag}"
-fly -t "$ENVIRONMENT" check-resource -r deploy_pipeline/prometheus-deployment-git --from "ref:${prometheus_commit_ref}"
+# fly -t "$ENVIRONMENT" check-resource -r deploy_pipeline/jumpbox-deployment-git --from "ref:${jumpbox_commit_ref}"
+# fly -t "$ENVIRONMENT" check-resource -r deploy_pipeline/bosh-deployment-git --from "ref:${bosh_commit_ref}"
+# fly -t "$ENVIRONMENT" check-resource -r deploy_pipeline/cf-deployment-git --from "ref:${cf_tag}"
+# fly -t "$ENVIRONMENT" check-resource -r deploy_pipeline/prometheus-deployment-git --from "ref:${prometheus_commit_ref}"
