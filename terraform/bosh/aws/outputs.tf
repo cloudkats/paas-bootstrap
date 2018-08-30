@@ -77,3 +77,7 @@ output "bosh_rds_password" {
 output "bosh_director_fqdn" {
   value = "${aws_route53_record.bosh_director.fqdn}"
 }
+
+output "bosh_database_name" {
+  value = "${postgresql_database.bosh.name}"
+}

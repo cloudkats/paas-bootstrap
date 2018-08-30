@@ -40,3 +40,10 @@ variable jumpbox_security_group_id {}
 variable "nat_az1_id" {}
 
 variable "private_dns_zone" {}
+
+variable "bosh_db_host" {}
+variable "bosh_db_username" {}
+
+variable "bosh_rds_password" {}
+
+variable "bosh_db_engine_version" {}

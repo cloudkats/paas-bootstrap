@@ -32,4 +32,4 @@ fly -t "$ENVIRONMENT" set-pipeline \
     -c ci/destruction_pipeline.yml -p destruction_pipeline -n
 fly -t "$ENVIRONMENT" unpause-pipeline -p destruction_pipeline
 
-fly -t "$ENVIRONMENT" check-resource -r destruction_pipeline/bosh-deployment-git --from "ref:${bosh_commit_ref}"
+# fly -t "$ENVIRONMENT" check-resource -r destruction_pipeline/bosh-deployment-git --from "ref:${bosh_commit_ref}"
