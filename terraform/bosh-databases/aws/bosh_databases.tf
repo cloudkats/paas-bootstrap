@@ -8,3 +8,7 @@ provider "postgresql" {
 resource "postgresql_database" "bosh" {
   name = "bosh"
 }
+
+resource "postgresql_database" "credhub" {
+  name = "credhub"
+}
