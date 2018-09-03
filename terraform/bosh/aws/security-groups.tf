@@ -103,6 +103,15 @@ resource "aws_security_group_rule" "jumpbox_uaa_bosh" {
   source_security_group_id = "${aws_security_group.bosh.id}"
 }
 
+resource "aws_security_group_rule" "jumpbox_credhub_bosh" {
+  security_group_id        = "${var.jumpbox_security_group_id}"
+  type                     = "egress"
+  protocol                 = "tcp"
+  from_port                = 8844
+  to_port                  = 8844
+  source_security_group_id = "${aws_security_group.bosh.id}"
+}
+
 resource "aws_security_group_rule" "jumpbox_ssh_bosh" {
   security_group_id        = "${var.jumpbox_security_group_id}"
   type                     = "egress"
