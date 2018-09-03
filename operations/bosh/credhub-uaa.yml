@@ -1,0 +1,24 @@
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=credhub/properties/credhub/data_storage
+  value:
+    type: ((external_db_adapter))
+    host: ((external_db_host))
+    port: ((external_db_port))
+    username: ((external_db_user))
+    password: ((external_db_password))
+    database: ((external_db_credhub_name))
+    require_tls: false
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaadb
+  value:
+    address: ((external_db_host))
+    port: ((external_db_port))
+    db_scheme: ((external_db_adapter))
+    databases:
+    - tag: uaa
+      name: ((external_db_uaa_name))
+    roles:
+    - tag: admin
+      name: ((external_db_user))
+      password: ((external_db_password))

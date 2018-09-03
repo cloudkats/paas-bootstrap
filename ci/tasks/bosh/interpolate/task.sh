@@ -15,13 +15,14 @@ bosh int \
   --vars-store bosh-manifests/bosh-variables.yml \
   -o bosh-deployment-git/aws/cpi.yml \
   -o bosh-deployment-git/aws/cli-iam-instance-profile.yml \
+  -o bosh-deployment-git/uaa.yml \
   -o bosh-deployment-git/credhub.yml \
   -o bosh-deployment-git/misc/external-db.yml \
   -o paas-bootstrap-git/operations/bosh/iam-instance-profile.yml \
   -o paas-bootstrap-git/operations/bosh/tags.yml \
   -o paas-bootstrap-git/operations/bosh/dns-resolution.yml \
   -o paas-bootstrap-git/operations/bosh/certificate.yml \
-  -o paas-bootstrap-git/operations/bosh/credhub.yml \
+  -o paas-bootstrap-git/operations/bosh/credhub-uaa.yml \
   -v director_name=bosh \
   -v internal_cidr="$(jq -r .internal_cidr < bosh-vars.json)" \
   -v internal_gw="$(jq -r .internal_cidr < bosh-vars.json | sed 's#0/24#1#')" \
@@ -43,4 +44,5 @@ bosh int \
   -v external_db_adapter="$(jq -r '.bosh_db_type' < bosh-vars.json)" \
   -v external_db_name="$(jq -r '.bosh_database_name' < databases-vars.json)" \
   -v external_db_credhub_name="$(jq -r '.credhub_database_name' < databases-vars.json)" \
+  -v external_db_uaa_name="$(jq -r '.uaa_database_name' < databases-vars.json)" \
   > bosh-manifests/bosh.yml

@@ -5,3 +5,7 @@ output "bosh_database_name" {
 output "credhub_database_name" {
   value = "${postgresql_database.credhub.name}"
 }
+
+output "uaa_database_name" {
+  value = "${postgresql_database.uaa.name}"
+}

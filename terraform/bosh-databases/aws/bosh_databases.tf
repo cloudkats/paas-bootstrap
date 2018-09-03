@@ -12,3 +12,7 @@ resource "postgresql_database" "bosh" {
 resource "postgresql_database" "credhub" {
   name = "credhub"
 }
+
+resource "postgresql_database" "uaa" {
+  name = "uaa"
+}
